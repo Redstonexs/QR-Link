@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>批量二维码生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header>
+                <h1>📱 批量二维码生成器</h1>
+                <p>将数百个网址批量转化成二维码</p>
+            </header>
+
+            <div class="input-section">
+                <h2>输入网址</h2>
+                <textarea 
+                    v-model="urlInput" 
+                    placeholder="请输入网址，每行一个：&#10;https://example.com&#10;https://google.com&#10;https://github.com"
+                    rows="10">
+                </textarea>
+                <div class="button-group">
+                    <button @click="generateQRCodes" class="btn btn-primary" :disabled="!urlInput.trim()">
+                        生成二维码
+                    </button>
+                    <button @click="clearAll" class="btn btn-secondary">
+                        清空
+                    </button>
+                </div>
+            </div>
+
+            <div class="status" v-if="urls.length > 0">
+                <p>已识别 <strong>{{ urls.length }}</strong> 个网址</p>
+            </div>
+
+            <div class="qr-section" v-if="qrCodes.length > 0">
+                <div class="qr-header">
+                    <h2>生成的二维码 ({{ qrCodes.length }}个)</h2>
+                    <button @click="downloadAll" class="btn btn-success">
+                        下载全部二维码
+                    </button>
+                </div>
+
+                <div class="qr-grid">
+                    <div class="qr-item" v-for="(qr, index) in qrCodes" :key="index">
+                        <div class="qr-number">{{ index + 1 }}</div>
+                        <canvas :id="'qr-' + index"></canvas>
+                        <div class="qr-url" :title="qr.url">{{ truncateUrl(qr.url) }}</div>
+                        <button @click="downloadSingle(index)" class="btn btn-small">
+                            下载
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" v-if="qrCodes.length === 0 && !urlInput">
+                <p>👆 请在上方输入网址开始生成二维码</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
