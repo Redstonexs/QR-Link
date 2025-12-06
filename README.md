@@ -1,6 +1,6 @@
-#这个是一个纯粹的AI项目
+# 这个是一个纯粹的AI项目
 
-#包括下面那段readme也是AI做的
+# 包括下面那段readme也是AI做的
 
 # 📱 批量二维码生成器 (QR-Link Generator)
 
